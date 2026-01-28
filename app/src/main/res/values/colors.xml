@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#6A8A2D</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="secondary">#03DAC6</color>
+    <color name="on_secondary">#000000</color>
+    <color name="mint_green">#81C784</color>
+    <color name="dark_green">#388E3C</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="cerulean_blue">#2979FF</color>
+    <color name="fingerprint_color">#FF4081</color>
+    <color name="off_white">#FAFAFA</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="cart_green">#4CAF50</color>
+    <color name="carts_green">#6A8A2D</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="orange">#FFA500</color>
+</resources>
