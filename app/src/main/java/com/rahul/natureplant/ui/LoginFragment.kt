@@ -37,7 +37,6 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private var loadingDialog: AlertDialog? = null
-
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
@@ -49,14 +48,20 @@ class LoginFragment : Fragment() {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        executor = ContextCompat.getMainExecutor(context)
-
-        showBiometricPrompt()
+        executor = ContextCompat.getMainExecutor(requireContext())
 
         return binding.root
     }
 
     private fun showBiometricPrompt() {
+        val biometricBottomSheet = BiometricBottomSheetFragment()
+        biometricBottomSheet.setOnEnableClickListener {
+            showBiometricLogin()
+        }
+        biometricBottomSheet.show(parentFragmentManager, biometricBottomSheet.tag)
+    }
+
+    private fun showBiometricLogin() {
 
         biometricPrompt = BiometricPrompt(this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
@@ -163,8 +168,9 @@ class LoginFragment : Fragment() {
         }
 
         binding.ivFingerprint.setOnClickListener {
-            showBiometricPrompt()
+            //showBiometricPrompt()
         }
+        showBiometricPrompt()
 
         binding.tvSignUp.setOnClickListener {
             val intent = Intent(requireContext(), RegisterActivity::class.java)

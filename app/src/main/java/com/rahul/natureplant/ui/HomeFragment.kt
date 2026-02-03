@@ -1,11 +1,17 @@
 package com.rahul.natureplant.ui
 
 import android.app.AlertDialog
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -15,7 +21,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
@@ -31,7 +37,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PlantViewModel by viewModels()
+    private val viewModel: PlantViewModel by activityViewModels()
     private lateinit var plantAdapter: PlantAdapter
     private var rotation: Animation? = null
     private lateinit var toggle: ActionBarDrawerToggle
@@ -114,10 +120,14 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private fun setupPlants() {
-        plantAdapter = PlantAdapter { plant ->
+        plantAdapter = PlantAdapter(onPlantClick = { plant ->
             val action = HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(plant)
             findNavController().navigate(action)
-        }
+        }, onAddToCartClick = { plant ->
+            viewModel.addToCart(plant, 1)
+            showAnimatedSuccessDialog()
+            Toast.makeText(requireContext(), "${plant.name} added to cart", Toast.LENGTH_SHORT).show()
+        })
         binding.rvPlants.adapter = plantAdapter
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             plantAdapter.submitList(plants)
@@ -129,6 +139,15 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         }
     }
 
+    private fun showAnimatedSuccessDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_animated_success)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+
+    }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_settings -> {

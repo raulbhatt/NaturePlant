@@ -13,5 +13,6 @@ data class Plant(
     val description: String,
     val imageUrl: String, // Updated to String for internet images
     val category: String,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    var quantity: Int = 1
 ) : Parcelable

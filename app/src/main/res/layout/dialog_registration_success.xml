@@ -16,32 +16,30 @@
         app:lottie_rawRes="@raw/lottie_success" />
 
     <TextView
-        android:id="@+id/text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Added to Cart!"
+        android:text="Success!"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/text_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Your item has been successfully added to the cart."
+        android:text="Your account has been created successfully."
         android:textColor="@color/black" />
 
     <Button
-        android:id="@+id/btn_continue_shopping"
+        android:id="@+id/btn_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:background="@drawable/bg_button"
-        android:text="Continue Shopping"
+        android:text="OK"
         android:textColor="@color/white" />
 
 </LinearLayout>

@@ -1,12 +1,13 @@
 package com.rahul.natureplant.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.rahul.natureplant.R
 import androidx.appcompat.app.AppCompatActivity
+import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -68,7 +69,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showSuccessDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_success, null)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_registration_success, null)
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .setCancelable(false)
@@ -76,7 +77,8 @@ class RegisterActivity : AppCompatActivity() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        val btnOk = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_ok)
+        val btnOk = dialogView.findViewById<Button>(R.id.btn_ok)
+
         btnOk.setOnClickListener {
             dialog.dismiss()
             finish()

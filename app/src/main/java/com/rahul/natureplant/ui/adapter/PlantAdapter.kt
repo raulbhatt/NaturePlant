@@ -11,7 +11,8 @@ import com.rahul.natureplant.databinding.ItemPlantBinding
 import com.rahul.natureplant.model.Plant
 
 class PlantAdapter(
-    private val onPlantClick: (Plant) -> Unit
+    private val onPlantClick: (Plant) -> Unit,
+    private val onAddToCartClick: (Plant) -> Unit
 ) : ListAdapter<Plant, PlantAdapter.PlantViewHolder>(PlantDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
@@ -23,9 +24,10 @@ class PlantAdapter(
         val plant = getItem(position)
         holder.bind(plant)
         holder.itemView.setOnClickListener { onPlantClick(plant) }
+        holder.binding.fabAddToCart.setOnClickListener { onAddToCartClick(plant) }
     }
 
-    inner class PlantViewHolder(private val binding: ItemPlantBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PlantViewHolder(internal val binding: ItemPlantBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(plant: Plant) {
             binding.tvPlantName.text = plant.name
             binding.tvPlantPrice.text = "$${plant.price}"

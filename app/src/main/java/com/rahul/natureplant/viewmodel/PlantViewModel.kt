@@ -15,8 +15,53 @@ class PlantViewModel : ViewModel() {
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
 
+    private val _cartItems = MutableLiveData<List<Plant>>()
+    val cartItems: LiveData<List<Plant>> = _cartItems
+
+    private val cart = mutableListOf<Plant>()
+
     init {
         loadMockData()
+    }
+
+    fun addToCart(plant: Plant, quantity: Int) {
+        val existingPlant = cart.find { it.id == plant.id }
+        if (existingPlant != null) {
+            val updatedPlant = existingPlant.copy(quantity = existingPlant.quantity + quantity)
+            val index = cart.indexOf(existingPlant)
+            cart[index] = updatedPlant
+        } else {
+            cart.add(plant.copy(quantity = quantity))
+        }
+        _cartItems.value = ArrayList(cart)
+    }
+
+    fun removeFromCart(plant: Plant) {
+        cart.remove(plant)
+        _cartItems.value = ArrayList(cart)
+    }
+
+    fun increaseQuantity(plant: Plant) {
+        val existingPlant = cart.find { it.id == plant.id }
+        if (existingPlant != null) {
+            val updatedPlant = existingPlant.copy(quantity = existingPlant.quantity + 1)
+            val index = cart.indexOf(existingPlant)
+            cart[index] = updatedPlant
+            _cartItems.value = ArrayList(cart)
+        }
+    }
+
+    fun decreaseQuantity(plant: Plant) {
+        val existingPlant = cart.find { it.id == plant.id }
+        if (existingPlant != null && existingPlant.quantity > 1) {
+            val updatedPlant = existingPlant.copy(quantity = existingPlant.quantity - 1)
+            val index = cart.indexOf(existingPlant)
+            cart[index] = updatedPlant
+            _cartItems.value = ArrayList(cart)
+        } else if (existingPlant != null && existingPlant.quantity == 1) {
+            cart.remove(existingPlant)
+            _cartItems.value = ArrayList(cart)
+        }
     }
 
     private fun loadMockData() {
@@ -83,7 +128,7 @@ class PlantViewModel : ViewModel() {
             "Kalanchoe" to "https://images.unsplash.com/photo-1512428813824-f713cb752935?w=800&q=80",
             "Orchid" to "https://images.unsplash.com/photo-1593691509543-c55fb32e7355?w=800&q=80",
             "Lavender" to "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80",
-            "Rosemary" to "https://images.unsplash.com/photo-1599819177626-b50f9dd21c9b?w=800&q=80",
+            "Rosemary" to "https.unsplash.com/photo-1599819177626-b50f9dd21c9b?w=800&q=80",
             "Mint" to "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800&q=80",
             "Thyme" to "https://images.unsplash.com/photo-1597055410917-6868ec5fcf9a?w=800&q=80",
             "Basil" to "https://images.unsplash.com/photo-1632207691143-643e2a9a9b7a?w=800&q=80",

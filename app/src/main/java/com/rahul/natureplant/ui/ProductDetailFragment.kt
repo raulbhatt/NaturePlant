@@ -1,14 +1,24 @@
 package com.rahul.natureplant.ui
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentProductDetailBinding
+import com.rahul.natureplant.model.Plant
+import com.rahul.natureplant.viewmodel.PlantViewModel
 
 class ProductDetailFragment : Fragment() {
 
@@ -16,12 +26,14 @@ class ProductDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: ProductDetailFragmentArgs by navArgs()
     private var quantity = 1
+    private lateinit var plantViewModel: PlantViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductDetailBinding.inflate(inflater, container, false)
+        plantViewModel = ViewModelProvider(requireActivity())[PlantViewModel::class.java]
         return binding.root
     }
 
@@ -34,7 +46,7 @@ class ProductDetailFragment : Fragment() {
             tvTitle.text = plant.name
             tvPlantName.text = plant.name
             tvDescription.text = plant.description
-            tvPrice.text = "$${plant.price}"
+            updatePrice(plant)
             tvQuantity.text = quantity.toString()
 
             Glide.with(requireContext())
@@ -60,23 +72,43 @@ class ProductDetailFragment : Fragment() {
             ivPlus.setOnClickListener {
                 quantity++
                 tvQuantity.text = quantity.toString()
-                val totalPrice = plant.price * quantity
-                tvPrice.text = "$${totalPrice}"
+                updatePrice(plant)
             }
 
             ivMinus.setOnClickListener {
                 if (quantity > 1) {
                     quantity--
                     tvQuantity.text = quantity.toString()
-                    val totalPrice = plant.price * quantity
-                    tvPrice.text = "$${totalPrice}"
+                    updatePrice(plant)
                 }
             }
 
             btnAddToCart.setOnClickListener {
-                // Add to cart logic with quantity
+                plantViewModel.addToCart(plant, quantity)
+                showAnimatedSuccessDialog()
             }
         }
+    }
+
+    private fun updatePrice(plant: Plant) {
+        val totalPrice = plant.price * quantity
+        binding.tvPrice.text = String.format("$%.2f", totalPrice.toDouble())
+    }
+
+    private fun showAnimatedSuccessDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_animated_success)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        // Automatically dismiss the dialog after a short delay
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing) {
+                dialog.dismiss()
+                findNavController().navigateUp()
+            }
+        }, 2000) // 2 seconds delay
     }
 
     override fun onDestroyView() {

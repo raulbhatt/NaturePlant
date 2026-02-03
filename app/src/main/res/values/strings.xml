@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Nature Plant</string>
-    <string name="txt_intro">Discover your perfect \nplant companion \nOn our Plant shop</string>
+    <string name="txt_intro">Discover your perfect 
+plant companion 
+On our Plant shop</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="order_list_items">Order list: %d items</string>
+    <string name="subtotal">Subtotal: $%1$.2f</string>
+    <string name="delivery_fee">Delivery Fee: $%1$.2f</string>
+    <string name="tax">Tax: $%1$.2f</string>
+    <string name="total_amount">Total: $%1$.2f</string>
 </resources>

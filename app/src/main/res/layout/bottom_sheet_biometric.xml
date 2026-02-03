@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enable Biometric Authentication"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Would you like to enable biometric authentication for a faster and more secure login?"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btn_enable_biometric"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/carts_green"
+        android:textColor="@color/white"
+        android:layout_marginTop="24dp"
+        android:text="Enable" />
+
+    <Button
+        android:id="@+id/btn_cancel_biometric"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+
+</LinearLayout>
