@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_sansevieria" />
+        android:src="@drawable/ic_splash2" />
 
     <View
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
         android:backgroundTint="@color/yellow"
         android:text="Get Started"
         android:textColor="@color/black"
-        app:cornerRadius="12dp"
+        app:cornerRadius="22dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_splash_plant"
         app:layout_constraintTop_toBottomOf="@+id/tv_splash_title"
         tools:layout_editor_absoluteX="12dp" />

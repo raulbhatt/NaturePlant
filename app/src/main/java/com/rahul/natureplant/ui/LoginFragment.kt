@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.rahul.natureplant.MainActivity
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentLoginBinding
+import com.rahul.natureplant.util.SharedPreferenceManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.security.KeyStore
@@ -40,6 +41,7 @@ class LoginFragment : Fragment() {
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
+    private lateinit var sharedPreferenceManager: SharedPreferenceManager
     private val KEY_NAME = "my_key"
 
     override fun onCreateView(
@@ -49,6 +51,7 @@ class LoginFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         executor = ContextCompat.getMainExecutor(requireContext())
+        sharedPreferenceManager = SharedPreferenceManager(requireContext())
 
         return binding.root
     }
@@ -73,6 +76,7 @@ class LoginFragment : Fragment() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     Toast.makeText(context, "Authentication Successfull!", Toast.LENGTH_SHORT).show()
+                    sharedPreferenceManager.setBiometricEnabled(true)
                     if (result.cryptoObject != null) {
                         try {
                             val encryptedInfo: ByteArray? = result.cryptoObject?.cipher?.doFinal("Hello World".toByteArray())
@@ -168,9 +172,18 @@ class LoginFragment : Fragment() {
         }
 
         binding.ivFingerprint.setOnClickListener {
-            //showBiometricPrompt()
+            if (sharedPreferenceManager.isBiometricEnabled()) {
+                showBiometricLogin()
+            } else {
+                showBiometricPrompt()
+            }
         }
-        showBiometricPrompt()
+
+        if (sharedPreferenceManager.isBiometricEnabled()) {
+            showBiometricLogin()
+        } else {
+            showBiometricPrompt()
+        }
 
         binding.tvSignUp.setOnClickListener {
             val intent = Intent(requireContext(), RegisterActivity::class.java)
