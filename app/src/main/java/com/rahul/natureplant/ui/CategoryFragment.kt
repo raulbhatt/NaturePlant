@@ -1,9 +1,11 @@
 package com.rahul.natureplant.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -39,6 +41,12 @@ class CategoryFragment : Fragment() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             appBarLayout.setPadding(0, systemBars.top, 0, 0)
             insets
+        }
+
+        val notificationIcon = view.findViewById<ImageView>(R.id.iv_profile)
+        notificationIcon.setOnClickListener {
+            val intent = Intent(requireActivity(), NotificationActivity::class.java)
+            startActivity(intent)
         }
 
         val categoryAdapter = CategoryAdapter()

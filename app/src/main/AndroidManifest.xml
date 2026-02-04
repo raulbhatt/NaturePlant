@@ -25,6 +25,9 @@
 
         <activity android:name=".ui.FingerprintActivity"
             android:exported="false"/>
+        <activity
+            android:name=".ui.NotificationActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

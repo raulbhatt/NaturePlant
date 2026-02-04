@@ -1,21 +1,26 @@
 package com.rahul.natureplant.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -32,6 +37,7 @@ import com.rahul.natureplant.ui.adapter.PlantAdapter
 import com.rahul.natureplant.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -78,15 +84,78 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        binding.ivProfile.setOnClickListener {
+            val intent = Intent(requireActivity(), NotificationActivity::class.java)
+            startActivity(intent)
+        }
+
 
         showLoading()
 
         setupPlants()
         setupCategories()
+        setupSearch()
+
 
         binding.tvSeeAll.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_categoryFragment)
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupSearch() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterPlants(s.toString())
+                if (s.toString().isNotEmpty()) {
+                    binding.etSearch.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_search),
+                        null,
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_close),
+                        null
+                    )
+                } else {
+                    binding.etSearch.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_search),
+                        null,
+                        null,
+                        null
+                    )
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.etSearch.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = binding.etSearch.compoundDrawables[2]
+                if (drawableEnd != null && event.rawX >= (binding.etSearch.right - drawableEnd.bounds.width())) {
+                    binding.etSearch.text?.clear()
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // You can handle the search action here, e.g., hide the keyboard
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+    }
+
+    private fun filterPlants(query: String) {
+        val allPlants = viewModel.plants.value ?: emptyList()
+        val filteredList = allPlants.filter {
+            it.name.lowercase(Locale.getDefault())
+                .contains(query.lowercase(Locale.getDefault()))
+        }
+        plantAdapter.submitList(filteredList)
     }
 
     private fun showLoading() {

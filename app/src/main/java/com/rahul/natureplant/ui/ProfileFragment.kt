@@ -35,6 +35,16 @@ class ProfileFragment : Fragment() {
             intent.type = "image/*"
             pickImage.launch(intent)
         }
+
+        binding.ivProfile.setOnClickListener {
+            val intent = Intent(requireActivity(), NotificationActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.notificationIcon.setOnClickListener {
+            val intent = Intent(requireActivity(), NotificationActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {
