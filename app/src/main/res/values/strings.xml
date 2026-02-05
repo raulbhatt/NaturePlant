@@ -10,4 +10,5 @@ On our Plant shop</string>
     <string name="delivery_fee">Delivery Fee: $%1$.2f</string>
     <string name="tax">Tax: $%1$.2f</string>
     <string name="total_amount">Total: $%1$.2f</string>
+    <string name="default_web_client_id">295340940460-5l1rfpk6m9s9qmho3hgeaps4q1uifgl0.apps.googleusercontent.com</string>
 </resources>

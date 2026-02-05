@@ -7,6 +7,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,6 +21,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -47,6 +50,8 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private lateinit var plantAdapter: PlantAdapter
     private var rotation: Animation? = null
     private lateinit var toggle: ActionBarDrawerToggle
+    private var backPressCount = 0
+    private val backPressHandler = Handler(Looper.getMainLooper())
 
 
     override fun onCreateView(
@@ -62,6 +67,20 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                backPressCount++
+                if (backPressCount == 3) {
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(requireContext(), "Press back button to exit the app", Toast.LENGTH_SHORT).show()
+                }
+
+                backPressHandler.removeCallbacksAndMessages(null)
+                backPressHandler.postDelayed({ backPressCount = 0 }, 2000) // Reset counter after 2 seconds
+            }
+        })
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBar) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

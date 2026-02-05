@@ -1,5 +1,6 @@
 package com.rahul.natureplant.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -20,6 +22,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.rahul.natureplant.MainActivity
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentLoginBinding
@@ -32,7 +38,6 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
@@ -42,7 +47,26 @@ class LoginFragment : Fragment() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
     private lateinit var sharedPreferenceManager: SharedPreferenceManager
-    private val KEY_NAME = "my_key"
+    private val keyName = "my_key"
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    Toast.makeText(requireContext(), "Google Sign-in successful!", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
+            } catch (e: ApiException) {
+                Log.w("LoginFragment", "Google sign in failed, status code: ${e.statusCode}", e)
+                Toast.makeText(requireContext(), "Google Sign-in failed. Error: ${e.statusCode}", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Google Sign-in cancelled or failed.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,18 +107,12 @@ class LoginFragment : Fragment() {
                             val intent = Intent(this@LoginFragment.requireContext(), MainActivity::class.java)
                             intent.putExtra("encryptedInfo", encryptedInfo.toString())
                             startActivity(intent)
-                            //finish()
                         } catch (e: Exception) {
                             Log.d("LoginFragment", "Error encrypting data: ${e.message}")
                         }
                     } else {
                         Log.d("LoginFragment", "Encrypted Info is null")
                     }
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    //Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()
                 }
             })
 
@@ -107,7 +125,7 @@ class LoginFragment : Fragment() {
         try {
             generateSecretKey(
                 KeyGenParameterSpec.Builder(
-                    KEY_NAME,
+                    keyName,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                 )
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
@@ -117,7 +135,6 @@ class LoginFragment : Fragment() {
                     .build()
             )
         } catch (e: Exception) {
-            // Handle key generation exception
             Toast.makeText(context, "Error generating key: ${e.message}", Toast.LENGTH_SHORT).show()
         }
 
@@ -130,7 +147,6 @@ class LoginFragment : Fragment() {
                     cipher.init(Cipher.ENCRYPT_MODE, secretKey)
                     biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
                 } catch (e: Exception) {
-                    // Handle exceptions
                     Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -147,7 +163,7 @@ class LoginFragment : Fragment() {
                         BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
                     )
                 }
-                startActivityForResult(enrollIntent, 100)
+                startActivity(enrollIntent)
             }
         }
 
@@ -155,6 +171,12 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         binding.btnSignIn.setOnClickListener {
             val email = binding.etEmail.text?.toString()
@@ -168,7 +190,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnGoogleSignIn.setOnClickListener {
-
+            handleGoogleSignIn()
         }
 
         binding.ivFingerprint.setOnClickListener {
@@ -191,37 +213,33 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun handleGoogleSignIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
 
-
-    /**
-     * Handles the sign-in button click, validates input, and navigates if successful.
-     */
     private fun handleSignIn() {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        // 1. Validate the inputs
         if (!isValidEmail(email)) {
             binding.etEmail.error = "Enter a valid email address"
-            // Request focus on the field with the error
             binding.etEmail.requestFocus()
-            return // Stop the function here
+            return
         }
 
         if (!isValidPassword(password)) {
             binding.etPassword.error = "Password must be longer than 6 characters"
             binding.etPassword.requestFocus()
-            return // Stop the function here
+            return
         }
 
-        // 2. If validation is successful, proceed with navigation
         showLoadingDialog()
 
         lifecycleScope.launch {
             delay(2000) // 2 seconds delay
             hideLoadingDialog()
             Toast.makeText(requireContext(), "Sign-in successful!", Toast.LENGTH_SHORT).show()
-            // Navigate to the next destination
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
         }
     }
@@ -247,19 +265,10 @@ class LoginFragment : Fragment() {
         loadingDialog?.dismiss()
     }
 
-    /**
-     * Checks if the provided email string is in a valid format.
-     * @return True if the email is valid, false otherwise.
-     */
     private fun isValidEmail(email: String): Boolean {
-        // Patterns.EMAIL_ADDRESS is a standard Android utility for email validation.
         return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    /**
-     * Checks if the provided password meets the length requirement.
-     * @return True if the password is valid, false otherwise.
-     */
     private fun isValidPassword(password: String): Boolean {
         return password.length > 6
     }
@@ -280,7 +289,7 @@ class LoginFragment : Fragment() {
     private fun getSecretKey(): SecretKey {
         val keyStore = KeyStore.getInstance("AndroidKeyStore")
         keyStore.load(null)
-        return keyStore.getKey(KEY_NAME, null) as SecretKey
+        return keyStore.getKey(keyName, null) as SecretKey
     }
 
     private fun getCipher(): Cipher {
@@ -290,6 +299,4 @@ class LoginFragment : Fragment() {
                     + KeyProperties.ENCRYPTION_PADDING_PKCS7
         )
     }
-
-
 }

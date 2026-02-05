@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295340940460",
+    "project_id": "natureplant-cf87b",
+    "storage_bucket": "natureplant-cf87b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295340940460:android:3a9d1a1c8ff4e1b5559309",
+        "android_client_info": {
+          "package_name": "com.rahul.natureplant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfmfem5S8_7VDS8d2_s0D2qImZxD5P4I0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
