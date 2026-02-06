@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Your account has been created successfully."
+        android:text="Item Added to cart Successfully"
         android:textColor="@color/black" />
 
     <Button

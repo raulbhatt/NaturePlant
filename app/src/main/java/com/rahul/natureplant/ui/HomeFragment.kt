@@ -20,6 +20,7 @@ import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -228,13 +229,27 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private fun showAnimatedSuccessDialog() {
-        val dialog = Dialog(requireContext())
+        /*val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_animated_success)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
+        dialog.show()*/
 
+        val dialogView = layoutInflater.inflate(R.layout.dialog_to_cart_success, null)
+        val dialog = context?.let { androidx.appcompat.app.AlertDialog.Builder(it) }
+            ?.setView(dialogView)
+            ?.setCancelable(true)
+            ?.create()
 
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val btnOk = dialogView.findViewById<Button>(R.id.btn_ok)
+
+        btnOk.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

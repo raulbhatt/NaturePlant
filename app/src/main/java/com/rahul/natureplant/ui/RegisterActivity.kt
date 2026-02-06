@@ -1,5 +1,6 @@
 package com.rahul.natureplant.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
@@ -81,6 +82,8 @@ class RegisterActivity : AppCompatActivity() {
 
         btnOk.setOnClickListener {
             dialog.dismiss()
+            val intent = Intent(this, VerificationCodeActivity::class.java)
+            startActivity(intent)
             finish()
         }
 

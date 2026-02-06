@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         encryptedInfo = intent.getStringExtra("encryptedInfo")
+        val navigateTo = intent.getStringExtra("NAVIGATE_TO")
 
         Log.d("MainActivity", "Encrypted Info: $encryptedInfo")
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        if (encryptedInfo != null) {
+        if (encryptedInfo != null || navigateTo == "HOME") {
             navController.navigate(R.id.homeFragment)
         }
 

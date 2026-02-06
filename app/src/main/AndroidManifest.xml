@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +31,21 @@
         <activity
             android:name=".ui.NotificationActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.VerificationCodeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.LocationInformationActivity"
+            android:exported="false" />
+
+        <activity android:name=".ui.NotificationPermissionActivity"
+            android:exported="false"
+            />
+
+        <activity android:name=".ui.EnterLocationActivity"
+            android:exported="false"
+            />
 
         <activity
             android:name=".MainActivity"

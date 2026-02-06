@@ -8,6 +8,7 @@
     <color name="dark_green">#388E3C</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
     <color name="cerulean_blue">#2979FF</color>
     <color name="fingerprint_color">#FF4081</color>
     <color name="off_white">#FAFAFA</color>
