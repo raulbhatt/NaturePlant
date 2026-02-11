@@ -77,6 +77,30 @@
                 android:orientation="vertical"
                 android:paddingBottom="16dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textColor="@color/black"
+                    android:paddingTop="12dp"
+                    android:textSize="18sp"
+                    android:layout_marginHorizontal="12dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Maligaon Chariali"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:drawableStart="@drawable/ic_location_home"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/red"
+                    android:textSize="18sp"
+                    android:paddingHorizontal="12dp"
+                    />
+
+
                 <EditText
                     android:id="@+id/et_search"
                     android:layout_width="match_parent"
