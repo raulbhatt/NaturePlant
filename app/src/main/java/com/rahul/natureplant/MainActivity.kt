@@ -1,15 +1,16 @@
 package com.rahul.natureplant
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.rahul.natureplant.databinding.ActivityMainBinding
+import com.rahul.natureplant.model.Location
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,12 +18,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var encryptedInfo : String? = null
 
+    private var location: Location? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         encryptedInfo = intent.getStringExtra("encryptedInfo")
+        location = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("location", Location::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("location")
+        }
         val navigateTo = intent.getStringExtra("NAVIGATE_TO")
 
         Log.d("MainActivity", "Encrypted Info: $encryptedInfo")
@@ -32,7 +41,9 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         if (encryptedInfo != null || navigateTo == "HOME") {
-            navController.navigate(R.id.homeFragment)
+            val bundle = Bundle()
+            bundle.putParcelable("location", location)
+            navController.navigate(R.id.homeFragment, bundle)
         }
 
         // Set up the bottom navigation view with navController

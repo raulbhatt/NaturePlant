@@ -80,24 +80,25 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="Home"
+                    android:drawableStart="@drawable/ic_location_home"
+                    android:drawableTint="@color/red"
                     android:textColor="@color/black"
+                    android:layout_marginHorizontal="18dp"
                     android:paddingTop="12dp"
                     android:textSize="18sp"
-                    android:layout_marginHorizontal="12dp"
                     />
 
                 <TextView
+                    android:id="@+id/txt_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Maligaon Chariali"
+                    android:layout_marginHorizontal="18dp"
                     android:textColor="@color/black"
+                    android:maxLines="1"
                     android:textStyle="bold"
-                    android:drawableStart="@drawable/ic_location_home"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/red"
-                    android:textSize="18sp"
-                    android:paddingHorizontal="12dp"
+                    android:textSize="14sp"
                     />
 
 
