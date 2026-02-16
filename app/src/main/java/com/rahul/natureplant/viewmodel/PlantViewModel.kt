@@ -190,6 +190,19 @@ class PlantViewModel : ViewModel() {
 
     fun loadApiPlantData() {
         viewModelScope.launch(Dispatchers.Main) {
+            val categoryList = listOf(
+                Category("All", "https://images.unsplash.com/photo-1470058869958-2a77a67d123f?w=1000&q=80"),
+                Category("Succulents", "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=1000&q=80"),
+                Category("Low Light", "https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?w=1000&q=80"),
+                Category("Tropical", "https://images.unsplash.com/photo-1516048015710-7a3b4c86be43?w=1000&q=80"),
+                Category("Trailing", "https://images.unsplash.com/photo-1545239351-ef35f43d514b?w=1000&q=80"),
+                Category("Trees", "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1000&q=80"),
+                Category("Flowering", "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1000&q=80"),
+                Category("Ferns", "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1000&q=80"),
+                Category("Small Plants", "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1000&q=80"),
+                Category("Herbs", "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1000&q=80")
+            )
+            _categories.value = categoryList
             _plantsApi.value = Resource.Loading()
             try {
                 val response = withContext(Dispatchers.IO) {

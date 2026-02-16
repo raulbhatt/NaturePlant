@@ -199,7 +199,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private fun filterPlants(query: String) {
-        val allPlants = viewModel.plants.value ?: emptyList()
+        val allPlants = viewModel.plantsApi.value?.data ?: emptyList()
         val filteredList = allPlants.filter {
             it.name.lowercase(Locale.getDefault())
                 .contains(query.lowercase(Locale.getDefault()))
@@ -209,7 +209,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     private fun setupCategories() {
         val categoryAdapter = CategoryAdapter { category ->
-            val allPlants = viewModel.plants.value ?: emptyList()
+            val allPlants = viewModel.plantsApi.value?.data ?: emptyList()
             val filteredPlants = if (category.name.equals("All", ignoreCase = true)) {
                 allPlants
             } else {
