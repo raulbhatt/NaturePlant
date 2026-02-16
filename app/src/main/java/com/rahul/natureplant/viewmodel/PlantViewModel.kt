@@ -3,14 +3,31 @@ package com.rahul.natureplant.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rahul.natureplant.model.Category
 import com.rahul.natureplant.model.Plant
+import com.rahul.natureplant.repository.PlantRepository
+import com.rahul.natureplant.utils.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 import kotlin.math.roundToInt
 
 class PlantViewModel : ViewModel() {
 
+    private val repository = PlantRepository()
+
+    // Mock Data
     private val _plants = MutableLiveData<List<Plant>>()
     val plants: LiveData<List<Plant>> = _plants
+
+
+    //Api Data
+    private val _plantsApi = MutableLiveData<Resource<List<Plant>>>()
+
+    val plantsApi: LiveData<Resource<List<Plant>>> = _plantsApi
+
 
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
@@ -18,10 +35,12 @@ class PlantViewModel : ViewModel() {
     private val _cartItems = MutableLiveData<List<Plant>>()
     val cartItems: LiveData<List<Plant>> = _cartItems
 
+
     private val cart = mutableListOf<Plant>()
 
     init {
-        loadMockData()
+        //loadMockData()
+        loadApiPlantData()
     }
 
     fun addToCart(plant: Plant, quantity: Int) {
@@ -168,4 +187,30 @@ class PlantViewModel : ViewModel() {
         }
         _plants.value = mockPlants
     }
+
+    fun loadApiPlantData() {
+        viewModelScope.launch(Dispatchers.Main) {
+            _plantsApi.value = Resource.Loading()
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    repository.getPlants()
+                }
+                _plantsApi.value = handleProductResponse(response)
+            } catch (t: Throwable) {
+                _plantsApi.value = Resource.Error("Something went wrong")
+            }
+        }
+    }
+
+    private fun handleProductResponse(response: Response<List<Plant>>): Resource<List<Plant>> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+
+
 }

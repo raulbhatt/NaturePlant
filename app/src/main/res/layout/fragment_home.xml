@@ -80,12 +80,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Home"
+                    android:text="Location"
                     android:drawableStart="@drawable/ic_location_home"
                     android:drawableTint="@color/red"
                     android:textColor="@color/black"
                     android:layout_marginHorizontal="18dp"
-                    android:paddingTop="12dp"
                     android:textSize="18sp"
                     />
 

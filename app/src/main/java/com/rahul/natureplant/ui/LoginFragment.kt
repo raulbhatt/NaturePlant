@@ -94,7 +94,7 @@ class LoginFragment : Fragment() {
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    Toast.makeText(context, "Authentication error: $errString", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Authentication error: $errString", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
