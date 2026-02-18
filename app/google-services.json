@@ -12,7 +12,20 @@
           "package_name": "com.rahul.natureplant"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "295340940460-ojcq7kqlgbcu7qbk6gni760d9g6hfs9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rahul.natureplant",
+            "certificate_hash": "fcbc8b2f4ad533a2946708ce42e9e10dac57fffb"
+          }
+        },
+        {
+          "client_id": "295340940460-5l1rfpk6m9s9qmho3hgeaps4q1uifgl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDfmfem5S8_7VDS8d2_s0D2qImZxD5P4I0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295340940460-5l1rfpk6m9s9qmho3hgeaps4q1uifgl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

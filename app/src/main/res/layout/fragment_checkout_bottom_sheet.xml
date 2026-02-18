@@ -119,7 +119,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_gpay" />
+            android:src="@drawable/ic_gpay2" />
 
         <ImageView
             android:layout_width="44dp"
@@ -130,7 +130,7 @@
             />
 
         <ImageView
-            android:layout_width="44dp"
+            android:layout_width="48dp"
             android:layout_height="32dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_mastercard" />

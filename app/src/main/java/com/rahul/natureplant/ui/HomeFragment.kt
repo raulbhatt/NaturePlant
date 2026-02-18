@@ -13,8 +13,10 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -34,6 +36,7 @@ import com.rahul.natureplant.model.Location
 import com.rahul.natureplant.util.SharedPrefManager
 import com.rahul.natureplant.ui.adapter.CategoryAdapter
 import com.rahul.natureplant.ui.adapter.PlantAdapter
+import com.rahul.natureplant.utils.Resource
 import com.rahul.natureplant.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,7 +52,6 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private var backPressCount = 0
     private val backPressHandler = Handler(Looper.getMainLooper())
     private lateinit var sharedPrefManager: SharedPrefManager
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -129,7 +131,6 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             val intent = Intent(requireActivity(), NotificationActivity::class.java)
             startActivity(intent)
         }
-
 
         setupPlants()
         setupCategories()
@@ -230,17 +231,25 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         }, onAddToCartClick = { plant ->
             viewModel.addToCart(plant, 1)
             showAnimatedSuccessDialog()
-            Toast.makeText(requireContext(), "${plant.name} added to cart", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "${'$'}{plant.name} added to cart", Toast.LENGTH_SHORT)
                 .show()
         })
         binding.rvPlants.adapter = plantAdapter
 
-//        viewModel.plants.observe(viewLifecycleOwner) { plants ->
-//            plantAdapter.submitList(plants)
-//        }
-
-        viewModel.plantsApi.observe(viewLifecycleOwner) { plants ->
-            plantAdapter.submitList(plants?.data)
+        viewModel.plantsApi.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    plantAdapter.submitList(resource.data)
+                }
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
     }

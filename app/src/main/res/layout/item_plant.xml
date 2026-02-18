@@ -19,8 +19,7 @@
             android:id="@+id/iv_plant"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:layout_marginTop="4dp"
-            android:scaleType="centerInside"
+            android:scaleType="fitXY"
             android:src="@drawable/img_aloe"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="-4dp" />

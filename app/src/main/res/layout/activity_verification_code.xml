@@ -1,115 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:background="@color/white"
+    android:orientation="vertical"
     android:padding="8dp"
     tools:context=".ui.VerificationCodeActivity">
 
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
-        android:layout_gravity="start"
-        android:padding="8dp"/>
-
-
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_height="match_parent">
+        android:padding="8dp">
 
-        <TextView
+        <ImageView
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verify Code"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"/>
+            android:layout_gravity="start"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Please enter the code we just sent to email example@email.com"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_marginTop="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginTop="32dp">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/otp_edit_text1"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:inputType="number"
-                android:maxLength="1"
-                android:gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Verify Code"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/otp_edit_text2"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:inputType="number"
-                android:maxLength="1"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginStart="16dp"/>
+                android:text="Please enter the code we just sent to email example@email.com"
+                android:textColor="@color/black" />
 
-            <EditText
-                android:id="@+id/otp_edit_text3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:inputType="number"
-                android:maxLength="1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:gravity="center"
-                android:layout_marginStart="16dp"/>
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/otp_edit_text4"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:inputType="number"
-                android:maxLength="1"
-                android:gravity="center"
-                android:layout_marginStart="16dp"/>
+                <EditText
+                    android:id="@+id/otp_edit_text1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/otp_edit_text2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/otp_edit_text3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+                <EditText
+                    android:id="@+id/otp_edit_text4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Didn't receive OTP?"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/resend_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resend code"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/verifyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/carts_green"
+                android:text="Verify" />
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Didn't receive OTP?"
-            android:textColor="@color/black"
-            android:layout_marginTop="32dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Resend code"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/verifyButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/carts_green"
-            android:text="Verify"
-            android:layout_marginTop="32dp"/>
-
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-
-</LinearLayout>
+</RelativeLayout>
