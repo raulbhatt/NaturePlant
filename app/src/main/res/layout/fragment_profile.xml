@@ -136,18 +136,20 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_width="415dp"
+        android:layout_height="401dp"
         android:background="@drawable/profile_options_bg"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:layout_editor_absoluteX="-4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="10dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/edit_profile_icon"
@@ -174,10 +176,12 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/shopping_address_icon"
@@ -204,10 +208,12 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/wishlist_icon"
@@ -234,10 +240,12 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/order_history_icon"
@@ -264,10 +272,12 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/notification_icon"
@@ -294,11 +304,12 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/credit_card_icon"
@@ -330,7 +341,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:padding="12dp"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/settings_icon"
@@ -357,7 +369,7 @@
                 android:src="@drawable/ic_arrow_right" />
 
         </RelativeLayout>
-        
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

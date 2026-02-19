@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_category"
         android:title="Shop" />
     <item
+        android:id="@+id/chatFragment"
+        android:icon="@drawable/ic_chat"
+        android:title="Chat" />
+    <item
         android:id="@+id/cartFragment"
         android:icon="@drawable/ic_cart"
         android:title="Cart" />

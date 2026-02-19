@@ -15,10 +15,12 @@ biometricKtx = "1.1.0"
 playServicesWallet = "19.4.0"
 firebaseBom = "34.9.0"
 firebaseFirestoreKtx = "26.0.0"
+googlegms = "4.4.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 google-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
+firebase-ai = { module = "com.google.firebase:firebase-ai" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -39,5 +41,6 @@ firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-fires
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+gms-services = {id ="com.google.gms.google-services", version.ref="googlegms"}
 androidx-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 

@@ -108,4 +108,10 @@
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
 
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.rahul.natureplant.ui.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" />
+
 </navigation>
