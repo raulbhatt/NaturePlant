@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ai.FirebaseAI
@@ -17,9 +19,7 @@ import com.google.firebase.ai.type.content
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentChatBinding
 import com.rahul.natureplant.ui.adapter.ChatAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -81,23 +81,27 @@ class ChatFragment : Fragment() {
                 binding.chatRecyclerView.smoothScrollToPosition(messages.size - 1)
                 binding.messageEditText.setText("")
 
-                // Send to Gemini in background
-                GlobalScope.launch {
-                    CoroutineScope(coroutineContext).launch {
-                        try {
-                            val response = chat.sendMessage(userMessage)
-                            withContext(Dispatchers.IO) {
-                                messages.add(Message("AI", response.text ?: "No response"))
-                                adapter.notifyItemInserted(messages.size - 1)
-                                binding.chatRecyclerView.scrollToPosition(messages.size - 1)
-                            }
-                        } catch (e: Exception) {
-                            withContext(Dispatchers.Main) {
-                                //Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
+                // Show typing indicator
+                binding.typingIndicator.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.typing_indicator_animation)
+                binding.typingIndicator.startAnimation(animation)
 
+                // Send to Gemini in background
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        val response = withContext(Dispatchers.IO) {
+                            chat.sendMessage(userMessage)
+                        }
+                        messages.add(Message("AI", response.text ?: "No response"))
+                        adapter.notifyItemInserted(messages.size - 1)
+                        binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    } finally {
+                        binding.typingIndicator.clearAnimation()
+                        binding.typingIndicator.visibility = View.GONE
+                    }
                 }
             }
         }

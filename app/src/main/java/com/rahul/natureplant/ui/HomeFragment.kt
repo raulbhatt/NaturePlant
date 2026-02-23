@@ -1,25 +1,36 @@
 package com.rahul.natureplant.ui
 
+import VisualSearchManager
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -30,6 +41,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.common.util.concurrent.ListenableFuture
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentHomeBinding
 import com.rahul.natureplant.model.Location
@@ -38,9 +50,11 @@ import com.rahul.natureplant.ui.adapter.CategoryAdapter
 import com.rahul.natureplant.ui.adapter.PlantAdapter
 import com.rahul.natureplant.utils.Resource
 import com.rahul.natureplant.viewmodel.PlantViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.util.concurrent.ExecutionException
 
 class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -52,6 +66,20 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private var backPressCount = 0
     private val backPressHandler = Handler(Looper.getMainLooper())
     private lateinit var sharedPrefManager: SharedPrefManager
+
+    private var imageCapture: ImageCapture? = null
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+
+    private val visualSearchManager by lazy { VisualSearchManager("AIzaSyDfmfem5S8_7VDS8d2_s0D2qImZxD5P4I0") }
+
+    private val cameraPermissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                startCamera()
+            } else {
+                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,22 +115,27 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    backPressCount++
-                    if (backPressCount == 3) {
-                        requireActivity().finish()
+                    if (binding.cameraPreview.visibility == View.VISIBLE) {
+                        binding.cameraPreview.visibility = View.GONE
+                        binding.captureButton.visibility = View.GONE
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Press back button to exit the app",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                        backPressCount++
+                        if (backPressCount == 3) {
+                            requireActivity().finish()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Press back button to exit the app",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                    backPressHandler.removeCallbacksAndMessages(null)
-                    backPressHandler.postDelayed(
-                        { backPressCount = 0 },
-                        2000
-                    ) // Reset counter after 2 seconds
+                        backPressHandler.removeCallbacksAndMessages(null)
+                        backPressHandler.postDelayed(
+                            { backPressCount = 0 },
+                            2000
+                        )
+                    }
                 }
             })
 
@@ -127,6 +160,18 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        binding.ivCam.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                startCamera()
+            } else {
+                cameraPermissionRequest.launch(Manifest.permission.CAMERA)
+            }
+        }
+        
+        binding.captureButton.setOnClickListener { 
+            takePhoto()
+        }
+
         binding.ivProfile.setOnClickListener {
             val intent = Intent(requireActivity(), NotificationActivity::class.java)
             startActivity(intent)
@@ -144,6 +189,63 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     private fun displayLocation(location: Location) {
         binding.txtLocation.text = location.address
+    }
+
+    private fun startCamera() {
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture.addListener({
+            try {
+                val cameraProvider = cameraProviderFuture.get()
+                bindPreview(cameraProvider)
+                binding.cameraPreview.visibility = View.VISIBLE
+                binding.captureButton.visibility = View.VISIBLE
+            } catch (e: ExecutionException) {
+                Log.e("HomeFragment", "Error starting camera: ${e.message}")
+            } catch (e: InterruptedException) {
+                Log.e("HomeFragment", "Error starting camera: ${e.message}")
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+        val preview = Preview.Builder().build()
+        val cameraSelector = CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+        preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
+        imageCapture = ImageCapture.Builder().build()
+        cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview, imageCapture)
+    }
+
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val bitmap = image.toBitmap()
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            val result = visualSearchManager.performVisualSearch(bitmap)
+                            withContext(Dispatchers.Main) {
+                                updateUI(result)
+                            }
+                            image.close()
+                        }
+                    }
+                    binding.cameraPreview.visibility = View.GONE
+                    binding.captureButton.visibility = View.GONE
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("HomeFragment", "Image capture failed: ${exception.message}", exception)
+                }
+            })
+    }
+
+
+    private fun updateUI(result: String?) {
+        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -192,7 +294,6 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // You can handle the search action here, e.g., hide the keyboard
                 return@setOnEditorActionListener true
             }
             false
@@ -231,7 +332,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         }, onAddToCartClick = { plant ->
             viewModel.addToCart(plant, 1)
             showAnimatedSuccessDialog()
-            Toast.makeText(requireContext(), "${'$'}{plant.name} added to cart", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "${plant.name} added to cart", Toast.LENGTH_SHORT)
                 .show()
         })
         binding.rvPlants.adapter = plantAdapter
@@ -241,10 +342,12 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     plantAdapter.submitList(resource.data)
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
@@ -291,7 +394,6 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             .setTitle("Logout")
             .setMessage("Are you sure you want to logout?")
             .setPositiveButton("Logout") { _, _ ->
-                // Navigate to login screen
                 findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
             }
             .setNegativeButton("Cancel", null)

@@ -48,22 +48,31 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    
+
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    
+
     // Glide
     implementation(libs.glide)
     implementation(libs.androidx.biometric.ktx)
+    implementation(libs.androidx.runtime)
     kapt(libs.glide.compiler)
-    
+
     // Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.lottie)
 
     implementation(libs.firebase.ai)
+
+    // Gemini SDK for Android
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
+    // For image handling (optional but helpful)
+    implementation("androidx.camera:camera-camera2:1.4.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-view:1.4.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
