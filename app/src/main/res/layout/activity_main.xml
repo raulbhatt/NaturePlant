@@ -21,14 +21,14 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
+        app:itemActiveIndicatorStyle="@style/App.CustomIndicator"
+        app:itemBackground="@drawable/item_background_selector"
         app:itemIconTint="@color/cart_green"
         app:itemTextColor="@color/cart_green"
-        app:itemBackground="@drawable/item_background_selector"
-        app:itemActiveIndicatorStyle="@style/App.CustomIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
