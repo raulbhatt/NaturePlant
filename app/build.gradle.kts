@@ -41,6 +41,10 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -78,10 +82,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //implementation("androidx.biometric:biometric:1.2.0-alpha05")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha05")
-    implementation("androidx.biometric:biometric-ktx:1.1.0")
-
 
     // Logging Interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
@@ -94,6 +95,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
+    implementation("androidx.multidex:multidex:2.0.1")
 
     //Google Maps SDK
     implementation("com.google.android.gms:play-services-maps:18.2.0")
@@ -106,7 +108,11 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.espresso.core)
+    
     testImplementation("org.mockito:mockito-core:4.0.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation(libs.androidx.espresso.core)
 }
