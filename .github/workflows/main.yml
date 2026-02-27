@@ -83,6 +83,7 @@ jobs:
         with:
           project_id: 'natureplant-cf87b'
           workload_identity_provider: 'projects/295340940460/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          create_credentials_file: true # This is the key!
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
