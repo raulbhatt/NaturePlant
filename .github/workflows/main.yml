@@ -87,14 +87,19 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-
-      - name: Run tests on Firebase Test Lab
+          
+        # Upload to Firebase Test Lab (Physical Device)
+      - name: Run Tests on Firebase Test Lab
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: 'Run Instrumentation Tests'
         run: |
           gcloud firebase test android run \
-            --type instrumentation \
-            --app app/build/outputs/apk/debug/app-debug.apk \
-            --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
-            --device model=oriole,version=31,locale=en,orientation=portrait
+          --type instrumentation \
+          --app app/build/outputs/apk/debug/app-debug.apk \
+          --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+          --device model=pixel7,version=33,locale=en,orientation=portrait
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
