@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -50,9 +52,13 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.notificationIcon.setOnClickListener {
+        binding.rlNotification.setOnClickListener {
             val intent = Intent(requireActivity(), NotificationActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.rlSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
         }
     }
 

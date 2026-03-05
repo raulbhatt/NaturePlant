@@ -265,7 +265,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/carts_green"
-        android:text="Check Out"
+        android:text="Proceed to Checkout"
         app:cornerRadius="22dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
