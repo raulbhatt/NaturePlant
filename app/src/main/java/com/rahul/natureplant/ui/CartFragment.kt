@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentCartBinding
 import com.rahul.natureplant.ui.adapter.CartAdapter
@@ -24,8 +25,7 @@ class CartFragment : Fragment() {
         observeCartItems()
 
         binding.btnCheckout.setOnClickListener {
-            val checkoutBottomSheetFragment = CheckoutBottomSheetFragment()
-            checkoutBottomSheetFragment.show(parentFragmentManager, CheckoutBottomSheetFragment.TAG)
+            findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
         }
 
         return binding.root
@@ -33,7 +33,12 @@ class CartFragment : Fragment() {
 
     private fun setupRecyclerView() {
         cartAdapter = CartAdapter(
-            onRemoveClick = { viewModel.removeFromCart(it) },
+            onRemoveClick = { plant ->
+                val removeBottomSheet = RemoveCartBottomSheetFragment(plant) {
+                    viewModel.removeFromCart(it)
+                }
+                removeBottomSheet.show(parentFragmentManager, RemoveCartBottomSheetFragment.TAG)
+            },
             onIncreaseQuantity = { viewModel.increaseQuantity(it) },
             onDecreaseQuantity = { viewModel.decreaseQuantity(it) }
         )
@@ -51,7 +56,7 @@ class CartFragment : Fragment() {
                 binding.rvCart.visibility = View.VISIBLE
                 binding.tvOrderList.visibility = View.VISIBLE
                 binding.tvOrderList.text = getString(R.string.order_list_items, cartItems.size)
-                cartAdapter.submitList(cartItems.toMutableList()) // Submit a new list to the adapter
+                cartAdapter.submitList(cartItems.toList())
             }
             updateSummary(cartItems)
         }

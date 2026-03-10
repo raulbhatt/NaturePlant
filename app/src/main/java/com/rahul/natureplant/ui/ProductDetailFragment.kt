@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -42,6 +43,11 @@ class ProductDetailFragment : Fragment() {
 
         val plant = args.plant
 
+        setupUI(plant)
+        observeWishlist(plant)
+    }
+
+    private fun setupUI(plant: Plant) {
         binding.apply {
             tvTitle.text = plant.name
             tvPlantName.text = plant.name
@@ -87,6 +93,24 @@ class ProductDetailFragment : Fragment() {
                 plantViewModel.addToCart(plant, quantity)
                 showAnimatedSuccessDialog()
             }
+
+            btnWishlist.setOnClickListener {
+                plantViewModel.toggleWishlist(plant)
+                val isFavorite = plantViewModel.wishlistItems.value?.any { it.id == plant.id } == true
+                val message = if (isFavorite) "Added to wishlist" else "Removed from wishlist"
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeWishlist(plant: Plant) {
+        plantViewModel.wishlistItems.observe(viewLifecycleOwner) { wishlist ->
+            val isFavorite = wishlist.any { it.id == plant.id }
+            if (isFavorite) {
+                binding.btnWishlist.setColorFilter(requireContext().getColor(R.color.red))
+            } else {
+                binding.btnWishlist.setColorFilter(requireContext().getColor(R.color.light_gray))
+            }
         }
     }
 
@@ -102,13 +126,12 @@ class ProductDetailFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
 
-        // Automatically dismiss the dialog after a short delay
         Handler(Looper.getMainLooper()).postDelayed({
             if (dialog.isShowing) {
                 dialog.dismiss()
                 findNavController().navigateUp()
             }
-        }, 2000) // 2 seconds delay
+        }, 2000)
     }
 
     override fun onDestroyView() {

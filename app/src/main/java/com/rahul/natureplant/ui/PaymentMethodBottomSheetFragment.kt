@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rahul.natureplant.R
 
-class CheckoutBottomSheetFragment : BottomSheetDialogFragment() {
+class PaymentMethodBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

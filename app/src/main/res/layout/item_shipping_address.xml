@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/iv_address_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_circle_white"
+        android:backgroundTint="@color/off_white"
+        android:padding="8dp"
+        android:src="@drawable/ic_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_address_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/rb_selected"
+        app:layout_constraintStart_toEndOf="@id/iv_address_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_address_icon"
+        tools:text="Home" />
+
+    <TextView
+        android:id="@+id/tv_address_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/light_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/rb_selected"
+        app:layout_constraintStart_toStartOf="@id/tv_address_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_address_title"
+        tools:text="1901 Thornridge Cir. Shiloh, Hawaii 81063" />
+
+    <RadioButton
+        android:id="@+id/rb_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        app:buttonTint="@color/carts_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/off_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_address_detail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

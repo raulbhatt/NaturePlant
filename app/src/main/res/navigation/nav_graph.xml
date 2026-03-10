@@ -94,7 +94,11 @@
         android:id="@+id/cartFragment"
         android:name="com.rahul.natureplant.ui.CartFragment"
         android:label="Cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -117,5 +121,27 @@
         android:name="com.rahul.natureplant.ui.ChatFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat" />
+
+    <fragment
+        android:id="@+id/wishlistFragment"
+        android:name="com.rahul.natureplant.ui.WishlistFragment"
+        android:label="Wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.rahul.natureplant.ui.CheckoutFragment"
+        android:label="Checkout"
+        tools:layout="@layout/fragment_checkout">
+        <action
+            android:id="@+id/action_checkoutFragment_to_shippingAddressFragment"
+            app:destination="@id/shippingAddressFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shippingAddressFragment"
+        android:name="com.rahul.natureplant.ui.ShippingAddressFragment"
+        android:label="Shipping Address"
+        tools:layout="@layout/fragment_shipping_address" />
 
 </navigation>

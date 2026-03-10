@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set up the AppBarConfiguration for top-level destinations
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.homeFragment, R.id.categoryFragment, R.id.cartFragment, R.id.profileFragment, R.id.chatFragment)
+            setOf(R.id.homeFragment, R.id.categoryFragment, R.id.wishlistFragment, R.id.cartFragment, R.id.profileFragment)
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
