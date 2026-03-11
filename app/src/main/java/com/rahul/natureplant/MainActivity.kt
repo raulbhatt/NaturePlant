@@ -37,11 +37,24 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.homeFragment, R.id.categoryFragment, R.id.wishlistFragment, R.id.cartFragment, R.id.profileFragment)
         )
 
+        binding.fabChat.setOnClickListener {
+            navController.navigate(R.id.chatFragment)
+        }
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.splashFragment || destination.id == R.id.loginFragment) {
-                binding.bottomNavigation.visibility = View.GONE
-            } else {
-                binding.bottomNavigation.visibility = View.VISIBLE
+            when (destination.id) {
+                R.id.splashFragment, R.id.loginFragment -> {
+                    binding.bottomNavigation.visibility = View.GONE
+                    binding.fabChat.visibility = View.GONE
+                }
+                R.id.chatFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.fabChat.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.fabChat.visibility = View.VISIBLE
+                }
             }
         }
     }

@@ -22,4 +22,20 @@
         <item name="android:color">@color/light_gray</item>
         <item name="android:width">48dp</item>
     </style>
+
+    <!-- Shape Appearances for Material 3 -->
+    <style name="ShapeAppearance.Material3.Corner.Full" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.Corner.Large" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.Corner.Medium" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
 </resources>

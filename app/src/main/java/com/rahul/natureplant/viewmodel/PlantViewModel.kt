@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.rahul.natureplant.model.Address
 import com.rahul.natureplant.model.Category
 import com.rahul.natureplant.model.Plant
+import com.rahul.natureplant.model.ShippingType
 import com.rahul.natureplant.repository.PlantRepository
 import com.rahul.natureplant.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,12 @@ class PlantViewModel : ViewModel() {
     private val _selectedAddress = MutableLiveData<Address>()
     val selectedAddress: LiveData<Address> = _selectedAddress
 
+    private val _shippingTypes = MutableLiveData<List<ShippingType>>()
+    val shippingTypes: LiveData<List<ShippingType>> = _shippingTypes
+
+    private val _selectedShippingType = MutableLiveData<ShippingType>()
+    val selectedShippingType: LiveData<ShippingType> = _selectedShippingType
+
 
     private val cart = mutableListOf<Plant>()
     private val wishlist = mutableListOf<Plant>()
@@ -52,7 +59,26 @@ class PlantViewModel : ViewModel() {
     init {
         //loadMockData()
         loadApiPlantData()
-        loadAddresses()
+        //loadAddresses()
+        loadShippingTypes()
+    }
+
+    private fun loadShippingTypes() {
+        val types = listOf(
+            ShippingType(1, "Economy", "Estimated Arrival 22 Dec 2023", 25.0, true),
+            ShippingType(2, "Regular", "Estimated Arrival 21 Dec 2023", 35.0),
+            ShippingType(3, "Express", "Estimated Arrival 20 Dec", 45.0)
+        )
+        _shippingTypes.value = types
+        _selectedShippingType.value = types[0]
+    }
+
+    fun selectShippingType(shippingType: ShippingType) {
+        val updatedList = _shippingTypes.value?.map {
+            it.copy(isSelected = it.id == shippingType.id)
+        }
+        _shippingTypes.value = updatedList ?: emptyList()
+        _selectedShippingType.value = shippingType.copy(isSelected = true)
     }
 
     private fun loadAddresses() {
@@ -67,6 +93,31 @@ class PlantViewModel : ViewModel() {
         )
         _addresses.value = addressList
         _selectedAddress.value = addressList[0]
+    }
+
+    fun addCurrentLocationAddress(fullAddress: String) {
+        val currentList = _addresses.value?.toMutableList() ?: mutableListOf()
+        val exists = currentList.any { it.title == "Current Location" }
+        
+        if (!exists) {
+            val newId = (currentList.maxOfOrNull { it.id } ?: 0) + 1
+            val newAddress = Address(newId, "Current Location", fullAddress, false)
+            currentList.add(0, newAddress)
+            _addresses.value = currentList
+        } else {
+            val updatedList = currentList.map {
+                if (it.title == "Current Location") it.copy(detail = fullAddress) else it
+            }
+            _addresses.value = updatedList
+        }
+    }
+
+    fun addAddress(fullAddress: String) {
+        val currentList = _addresses.value?.toMutableList() ?: mutableListOf()
+        val newId = (currentList.maxOfOrNull { it.id } ?: 0) + 1
+        val newAddress = Address(newId, "New Address", fullAddress, false)
+        currentList.add(newAddress)
+        _addresses.value = currentList
     }
 
     fun selectAddress(address: Address) {

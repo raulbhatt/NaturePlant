@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentCheckoutBinding
 import com.rahul.natureplant.ui.adapter.CheckoutAdapter
+import com.rahul.natureplant.util.SharedPrefManager
 import com.rahul.natureplant.viewmodel.PlantViewModel
 
 class CheckoutFragment : Fragment() {
@@ -18,6 +19,7 @@ class CheckoutFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: PlantViewModel by activityViewModels()
     private lateinit var checkoutAdapter: CheckoutAdapter
+    private lateinit var sharedPrefManager: SharedPrefManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +33,15 @@ class CheckoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedPrefManager = SharedPrefManager(requireContext())
+        
+        // Load previously selected address if it exists and ViewModel hasn't been updated yet
+        sharedPrefManager.getSelectedAddress()?.let { savedAddress ->
+            if (viewModel.selectedAddress.value == null) {
+                viewModel.selectAddress(savedAddress)
+            }
+        }
+
         setupRecyclerView()
         observeData()
 
@@ -40,6 +51,10 @@ class CheckoutFragment : Fragment() {
 
         binding.btnChangeAddress.setOnClickListener {
             findNavController().navigate(R.id.action_checkoutFragment_to_shippingAddressFragment)
+        }
+
+        binding.btnChangeShipping.setOnClickListener {
+            findNavController().navigate(R.id.action_checkoutFragment_to_chooseShippingFragment)
         }
 
         binding.btnContinueToPayment.setOnClickListener {
@@ -62,6 +77,11 @@ class CheckoutFragment : Fragment() {
         viewModel.selectedAddress.observe(viewLifecycleOwner) { address ->
             binding.tvAddressTitle.text = address.title
             binding.tvAddressDetail.text = address.detail
+        }
+
+        viewModel.selectedShippingType.observe(viewLifecycleOwner) { shippingType ->
+            binding.tvShippingTitle.text = shippingType.title
+            binding.tvShippingDetail.text = shippingType.estimatedArrival
         }
     }
 

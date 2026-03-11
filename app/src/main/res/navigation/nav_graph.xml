@@ -136,12 +136,46 @@
         <action
             android:id="@+id/action_checkoutFragment_to_shippingAddressFragment"
             app:destination="@id/shippingAddressFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_chooseShippingFragment"
+            app:destination="@id/chooseShippingFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_paymentSuccessFragment"
+            app:destination="@id/paymentSuccessFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/shippingAddressFragment"
         android:name="com.rahul.natureplant.ui.ShippingAddressFragment"
         android:label="Shipping Address"
-        tools:layout="@layout/fragment_shipping_address" />
+        tools:layout="@layout/fragment_shipping_address">
+        <action
+            android:id="@+id/action_shippingAddressFragment_to_addAddressFragment"
+            app:destination="@id/addAddressFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addAddressFragment"
+        android:name="com.rahul.natureplant.ui.AddAddressFragment"
+        android:label="Add Address"
+        tools:layout="@layout/fragment_add_address" />
+
+    <fragment
+        android:id="@+id/chooseShippingFragment"
+        android:name="com.rahul.natureplant.ui.ChooseShippingFragment"
+        android:label="Choose Shipping"
+        tools:layout="@layout/fragment_choose_shipping" />
+
+    <fragment
+        android:id="@+id/paymentSuccessFragment"
+        android:name="com.rahul.natureplant.ui.PaymentSuccessFragment"
+        android:label="Payment Success"
+        tools:layout="@layout/dialog_payment_success">
+        <action
+            android:id="@+id/action_paymentSuccessFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

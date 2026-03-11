@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.FragmentShippingAddressBinding
 import com.rahul.natureplant.ui.adapter.AddressAdapter
+import com.rahul.natureplant.util.SharedPrefManager
 import com.rahul.natureplant.viewmodel.PlantViewModel
 
 class ShippingAddressFragment : Fragment() {
@@ -17,6 +19,7 @@ class ShippingAddressFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: PlantViewModel by activityViewModels()
     private lateinit var addressAdapter: AddressAdapter
+    private lateinit var sharedPrefManager: SharedPrefManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +33,13 @@ class ShippingAddressFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedPrefManager = SharedPrefManager(requireContext())
+        
+        // Fetch saved location and add it to the view model's address list
+        sharedPrefManager.getLocation()?.let { location ->
+            viewModel.addCurrentLocationAddress(location.address)
+        }
+
         setupRecyclerView()
         observeAddresses()
 
@@ -40,11 +50,16 @@ class ShippingAddressFragment : Fragment() {
         binding.btnApply.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnAddAddress.setOnClickListener {
+            findNavController().navigate(R.id.action_shippingAddressFragment_to_addAddressFragment)
+        }
     }
 
     private fun setupRecyclerView() {
         addressAdapter = AddressAdapter { address ->
             viewModel.selectAddress(address)
+            sharedPrefManager.saveSelectedAddress(address)
         }
         binding.rvAddresses.adapter = addressAdapter
     }

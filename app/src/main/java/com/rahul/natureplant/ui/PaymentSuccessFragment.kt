@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rahul.natureplant.R
-import com.rahul.natureplant.databinding.FragmentCheckoutBottomSheetBinding
+import com.rahul.natureplant.databinding.DialogPaymentSuccessBinding
 
-class PaymentMethodBottomSheetFragment : BottomSheetDialogFragment() {
+class PaymentSuccessFragment : Fragment() {
 
-    private var _binding: FragmentCheckoutBottomSheetBinding? = null
+    private var _binding: DialogPaymentSuccessBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,25 +19,28 @@ class PaymentMethodBottomSheetFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCheckoutBottomSheetBinding.inflate(inflater, container, false)
+        _binding = DialogPaymentSuccessBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.payButton.setOnClickListener {
-            dismiss()
-            findNavController().navigate(R.id.action_checkoutFragment_to_paymentSuccessFragment)
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.action_paymentSuccessFragment_to_homeFragment)
+        }
+
+        binding.btnViewOrder.setOnClickListener {
+            // Navigate to order list or detail
+        }
+
+        binding.btnViewEReceipt.setOnClickListener {
+            // Show receipt
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val TAG = "CheckoutBottomSheetFragment"
     }
 }

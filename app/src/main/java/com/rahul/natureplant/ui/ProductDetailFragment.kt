@@ -1,5 +1,6 @@
 package com.rahul.natureplant.ui
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -51,9 +52,9 @@ class ProductDetailFragment : Fragment() {
         binding.apply {
             tvTitle.text = plant.name
             tvPlantName.text = plant.name
-            tvDescription.text = plant.description
+            tvDescBody.text = plant.description
             updatePrice(plant)
-            tvQuantity.text = quantity.toString()
+            //tvQuantity.text = quantity.toString()
 
             Glide.with(requireContext())
                 .load(plant.imageUrl)
@@ -71,23 +72,27 @@ class ProductDetailFragment : Fragment() {
                 .load(plant.imageUrl)
                 .into(ivSmallPlant3)
 
+            Glide.with(requireContext())
+                .load(plant.imageUrl)
+                .into(ivSmallPlant4)
+
             ivBack.setOnClickListener {
                 findNavController().navigateUp()
             }
 
-            ivPlus.setOnClickListener {
+            /*ivPlus.setOnClickListener {
                 quantity++
                 tvQuantity.text = quantity.toString()
                 updatePrice(plant)
-            }
+            }*/
 
-            ivMinus.setOnClickListener {
+            /*ivMinus.setOnClickListener {
                 if (quantity > 1) {
                     quantity--
                     tvQuantity.text = quantity.toString()
                     updatePrice(plant)
                 }
-            }
+            }*/
 
             btnAddToCart.setOnClickListener {
                 plantViewModel.addToCart(plant, quantity)
@@ -114,9 +119,10 @@ class ProductDetailFragment : Fragment() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun updatePrice(plant: Plant) {
         val totalPrice = plant.price * quantity
-        binding.tvPrice.text = String.format("$%.2f", totalPrice.toDouble())
+        binding.tvTotalPrice.text = String.format("$%.2f", totalPrice.toDouble())
     }
 
     private fun showAnimatedSuccessDialog() {

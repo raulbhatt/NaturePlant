@@ -3,6 +3,7 @@ package com.rahul.natureplant.util
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.rahul.natureplant.model.Address
 import com.rahul.natureplant.model.Location
 
 class SharedPrefManager(context: Context) {
@@ -21,6 +22,21 @@ class SharedPrefManager(context: Context) {
         val locationJson = sharedPreferences.getString("location", null)
         return if (locationJson != null) {
             gson.fromJson(locationJson, Location::class.java)
+        } else {
+            null
+        }
+    }
+
+    fun saveSelectedAddress(address: Address) {
+        val addressJson = gson.toJson(address)
+        editor.putString("selected_address", addressJson)
+        editor.apply()
+    }
+
+    fun getSelectedAddress(): Address? {
+        val addressJson = sharedPreferences.getString("selected_address", null)
+        return if (addressJson != null) {
+            gson.fromJson(addressJson, Address::class.java)
         } else {
             null
         }
