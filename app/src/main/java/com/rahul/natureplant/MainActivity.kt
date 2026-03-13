@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.loginFragment -> {
+                R.id.splashFragment, R.id.loginFragment, R.id.paymentSuccessFragment -> {
                     binding.bottomNavigation.visibility = View.GONE
                     binding.fabChat.visibility = View.GONE
                 }
@@ -59,31 +59,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent != null) {
-            handleIntent(intent)
-        }
+        setIntent(intent)
+        handleIntent(intent)
     }
 
-    private fun handleIntent(intent: Intent) {
-        val encryptedInfo = intent.getStringExtra("encryptedInfo")
-        val location = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("location", Location::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra("location")
-        }
-        val navigateTo = intent.getStringExtra("NAVIGATE_TO")
-        val fromNotification = intent.getBooleanExtra("from_notification", false)
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            val encryptedInfo = it.getStringExtra("encryptedInfo")
+            val location = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelableExtra("location", Location::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                it.getParcelableExtra("location")
+            }
+            val navigateTo = it.getStringExtra("NAVIGATE_TO")
+            val fromNotification = it.getBooleanExtra("from_notification", false)
 
-        Log.d("MainActivity", "Encrypted Info: $encryptedInfo")
+            Log.d("MainActivity", "Encrypted Info: $encryptedInfo")
 
-        if (encryptedInfo != null || navigateTo == "HOME" || fromNotification) {
-            binding.root.post {
-                val bundle = Bundle()
-                bundle.putParcelable("location", location)
-                navController.navigate(R.id.homeFragment, bundle)
+            if (encryptedInfo != null || navigateTo == "HOME" || fromNotification) {
+                binding.root.post {
+                    val bundle = Bundle()
+                    bundle.putParcelable("location", location)
+                    navController.navigate(R.id.homeFragment, bundle)
+                }
             }
         }
     }

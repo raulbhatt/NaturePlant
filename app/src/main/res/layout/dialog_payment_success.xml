@@ -48,7 +48,7 @@
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:background="@drawable/bg_circle_white"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/carts_green"
             android:padding="30dp"
             android:src="@drawable/ic_check"
             app:tint="@color/white" />
@@ -84,7 +84,7 @@
             android:id="@+id/btn_view_order"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/carts_green"
             android:text="View Order"
             android:textAllCaps="false"
             android:textColor="@color/white"

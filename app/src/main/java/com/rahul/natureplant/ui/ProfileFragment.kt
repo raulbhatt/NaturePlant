@@ -26,7 +26,7 @@ class ProfileFragment : Fragment() {
     private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val imageUri: Uri? = it.data?.data
-            binding.profileImage.setImageURI(imageUri)
+            _binding?.profileImage?.setImageURI(imageUri)
         }
     }
 
@@ -60,6 +60,10 @@ class ProfileFragment : Fragment() {
         binding.rlSettings.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
         }
+
+        binding.rlOrderHistory.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_orderHistoryFragment)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,11 +71,11 @@ class ProfileFragment : Fragment() {
         db.collection("registeruser").document("mMlTZuXz8drBgXsvpGHb")
             .get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    binding.userName.text = document.getString("name")
-                    binding.userEmail.text = document.getString("email")
-                } else {
-                    // Handle the case where the document does not exist
+                _binding?.let { binding ->
+                    if (document != null && document.exists()) {
+                        binding.userName.text = document.getString("name")
+                        binding.userEmail.text = document.getString("email")
+                    }
                 }
             }
             .addOnFailureListener { exception ->

@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.androidx.biometric.ktx)
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.glide.compiler)
 
     // Lifecycle

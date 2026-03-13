@@ -108,6 +108,9 @@
         <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment" />
     </fragment>
 
     <fragment
@@ -176,6 +179,44 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_paymentSuccessFragment_to_eReceiptFragment"
+            app:destination="@id/eReceiptFragment" />
+        <action
+            android:id="@+id/action_paymentSuccessFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/eReceiptFragment"
+        android:name="com.rahul.natureplant.ui.EReceiptFragment"
+        android:label="E-Receipt"
+        tools:layout="@layout/fragment_e_receipt" />
+
+    <fragment
+        android:id="@+id/orderSummaryFragment"
+        android:name="com.rahul.natureplant.ui.OrderSummaryFragment"
+        android:label="Order Summary"
+        tools:layout="@layout/fragment_order_summary" />
+
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.rahul.natureplant.ui.OrderHistoryFragment"
+        android:label="Order History"
+        tools:layout="@layout/fragment_order_history">
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
+            app:destination="@id/trackOrderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trackOrderFragment"
+        android:name="com.rahul.natureplant.ui.TrackOrderFragment"
+        android:label="Track Order"
+        tools:layout="@layout/fragment_track_order">
+        <argument
+            android:name="plant"
+            app:argType="com.rahul.natureplant.model.Plant" />
     </fragment>
 
 </navigation>

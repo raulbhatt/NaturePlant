@@ -14,28 +14,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import kotlin.math.roundToInt
 
 class PlantViewModel : ViewModel() {
 
     private val repository = PlantRepository()
 
-    // Mock Data
-    private val _plants = MutableLiveData<List<Plant>>()
-    val plants: LiveData<List<Plant>> = _plants
-
-
-    //Api Data
     private val _plantsApi = MutableLiveData<Resource<List<Plant>>>()
-
     val plantsApi: LiveData<Resource<List<Plant>>> = _plantsApi
-
 
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
 
     private val _cartItems = MutableLiveData<List<Plant>>()
     val cartItems: LiveData<List<Plant>> = _cartItems
+
+    private val _lastOrderItems = MutableLiveData<List<Plant>>()
+    val lastOrderItems: LiveData<List<Plant>> = _lastOrderItems
 
     private val _wishlistItems = MutableLiveData<List<Plant>>(emptyList())
     val wishlistItems: LiveData<List<Plant>> = _wishlistItems
@@ -52,14 +46,11 @@ class PlantViewModel : ViewModel() {
     private val _selectedShippingType = MutableLiveData<ShippingType>()
     val selectedShippingType: LiveData<ShippingType> = _selectedShippingType
 
-
     private val cart = mutableListOf<Plant>()
     private val wishlist = mutableListOf<Plant>()
 
     init {
-        //loadMockData()
         loadApiPlantData()
-        //loadAddresses()
         loadShippingTypes()
     }
 
@@ -79,20 +70,6 @@ class PlantViewModel : ViewModel() {
         }
         _shippingTypes.value = updatedList ?: emptyList()
         _selectedShippingType.value = shippingType.copy(isSelected = true)
-    }
-
-    private fun loadAddresses() {
-        val addressList = listOf(
-            Address(1, "Home", "1901 Thornridge Cir. Shiloh, Hawaii 81063", true),
-            Address(2, "Office", "4517 Washington Ave. Manchester, Kentucky 39495"),
-            Address(3, "Parent's House", "8502 Preston Rd. Inglewood, Maine 98380"),
-            Address(4, "Friend's House", "2464 Royal Ln. Mesa, New Jersey 45463"),
-            Address(5, "Friend's House", "2464 Royal Ln. Mesa, New Jersey 45463"),
-            Address(6, "Friend's House", "2464 Royal Ln. Mesa, New Jersey 45463"),
-            Address(7, "Friend's House", "2464 Royal Ln. Mesa, New Jersey 45463"),
-        )
-        _addresses.value = addressList
-        _selectedAddress.value = addressList[0]
     }
 
     fun addCurrentLocationAddress(fullAddress: String) {
@@ -140,6 +117,12 @@ class PlantViewModel : ViewModel() {
         _cartItems.value = ArrayList(cart)
     }
 
+    fun clearCart() {
+        _lastOrderItems.value = ArrayList(cart)
+        cart.clear()
+        _cartItems.value = ArrayList(cart)
+    }
+
     fun removeFromCart(plant: Plant) {
         cart.remove(plant)
         _cartItems.value = ArrayList(cart)
@@ -154,7 +137,6 @@ class PlantViewModel : ViewModel() {
         }
         _wishlistItems.value = ArrayList(wishlist)
         
-        // Also update the main list if needed
         val currentData = _plantsApi.value?.data
         if (currentData != null) {
             val updatedList = currentData.map {
@@ -222,7 +204,4 @@ class PlantViewModel : ViewModel() {
         }
         return Resource.Error(response.message())
     }
-
-
-
 }

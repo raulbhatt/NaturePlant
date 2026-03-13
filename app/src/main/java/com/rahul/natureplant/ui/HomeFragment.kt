@@ -161,15 +161,20 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         }
 
         binding.ivCam.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            /*if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 startCamera()
             } else {
                 cameraPermissionRequest.launch(Manifest.permission.CAMERA)
-            }
+            }*/
+
+            val intent = Intent(requireActivity(), CameraActivity::class.java)
+            startActivity(intent)
         }
         
         binding.captureButton.setOnClickListener { 
             takePhoto()
+//            val intent = Intent(requireActivity(), CameraActivity::class.java)
+//            startActivity(intent)
         }
 
         binding.ivProfile.setOnClickListener {
@@ -358,7 +363,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private fun showAnimatedSuccessDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_to_cart_success, null)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_animated_success, null)
         val dialog = context?.let { androidx.appcompat.app.AlertDialog.Builder(it) }
             ?.setView(dialogView)
             ?.setCancelable(true)

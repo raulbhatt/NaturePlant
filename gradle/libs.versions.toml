@@ -23,6 +23,9 @@ firebaseAi = "17.9.0"
 runtime = "1.10.3"
 androidxTestJunit = "1.2.1"
 androidxTestRunner = "1.6.2"
+activity = "1.12.4"
+constraintlayout = "2.2.1"
+core = "1.17.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +52,9 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-firestore-ktx = { group = "com.google.firebase:firebase-firestore-ktx", name = "firestore-ktx" ,version.ref = "firebaseFirestoreKtx" }
 google-firebase-ai = { group = "com.google.firebase", name = "firebase-ai", version.ref = "firebaseAi" }
 androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+core = { group = "com.google.ar.sceneform", name = "core", version.ref = "core" }
 
 
 [plugins]
