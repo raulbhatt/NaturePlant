@@ -167,7 +167,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
                 cameraPermissionRequest.launch(Manifest.permission.CAMERA)
             }*/
 
-            val intent = Intent(requireActivity(), CameraActivity::class.java)
+            val intent = Intent(requireActivity(), ObjectDetectionVidActivity::class.java)
             startActivity(intent)
         }
         
@@ -362,6 +362,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     }
 
+    @SuppressLint("MissingInflatedId")
     private fun showAnimatedSuccessDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_animated_success, null)
         val dialog = context?.let { androidx.appcompat.app.AlertDialog.Builder(it) }

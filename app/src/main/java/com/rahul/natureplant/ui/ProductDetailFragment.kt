@@ -50,49 +50,21 @@ class ProductDetailFragment : Fragment() {
 
     private fun setupUI(plant: Plant) {
         binding.apply {
-            tvTitle.text = plant.name
+            tvTitle.text = "Plant Details"
             tvPlantName.text = plant.name
             tvDescBody.text = plant.description
+            tvCategory.text = plant.category
+            tvRating.text = plant.rating.toString()
             updatePrice(plant)
-            //tvQuantity.text = quantity.toString()
 
             Glide.with(requireContext())
                 .load(plant.imageUrl)
+                .placeholder(R.drawable.img_aloe)
                 .into(ivPlant)
-
-            Glide.with(requireContext())
-                .load(plant.imageUrl)
-                .into(ivSmallPlant1)
-
-            Glide.with(requireContext())
-                .load(plant.imageUrl)
-                .into(ivSmallPlant2)
-
-            Glide.with(requireContext())
-                .load(plant.imageUrl)
-                .into(ivSmallPlant3)
-
-            Glide.with(requireContext())
-                .load(plant.imageUrl)
-                .into(ivSmallPlant4)
 
             ivBack.setOnClickListener {
                 findNavController().navigateUp()
             }
-
-            /*ivPlus.setOnClickListener {
-                quantity++
-                tvQuantity.text = quantity.toString()
-                updatePrice(plant)
-            }*/
-
-            /*ivMinus.setOnClickListener {
-                if (quantity > 1) {
-                    quantity--
-                    tvQuantity.text = quantity.toString()
-                    updatePrice(plant)
-                }
-            }*/
 
             btnAddToCart.setOnClickListener {
                 plantViewModel.addToCart(plant, quantity)
@@ -104,6 +76,18 @@ class ProductDetailFragment : Fragment() {
                 val isFavorite = plantViewModel.wishlistItems.value?.any { it.id == plant.id } == true
                 val message = if (isFavorite) "Added to wishlist" else "Removed from wishlist"
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+
+            sellerInfo.setOnClickListener {
+                findNavController().navigate(R.id.action_productDetailFragment_to_sellerProfileFragment)
+            }
+            
+            ivChat.setOnClickListener {
+                Toast.makeText(requireContext(), "Chat with seller", Toast.LENGTH_SHORT).show()
+            }
+            
+            ivCall.setOnClickListener {
+                Toast.makeText(requireContext(), "Call seller", Toast.LENGTH_SHORT).show()
             }
         }
     }

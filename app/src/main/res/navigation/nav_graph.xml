@@ -82,7 +82,16 @@
         <action
             android:id="@+id/action_productDetailFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_productDetailFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/sellerProfileFragment"
+        android:name="com.rahul.natureplant.ui.SellerProfileFragment"
+        android:label="Seller Profile"
+        tools:layout="@layout/fragment_seller_profile" />
 
     <fragment
         android:id="@+id/categoryFragment"
@@ -207,6 +216,19 @@
         <action
             android:id="@+id/action_orderHistoryFragment_to_trackOrderFragment"
             app:destination="@id/trackOrderFragment" />
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_leaveReviewFragment"
+            app:destination="@id/leaveReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/leaveReviewFragment"
+        android:name="com.rahul.natureplant.ui.LeaveReviewFragment"
+        android:label="Leave Review"
+        tools:layout="@layout/fragment_leave_review">
+        <argument
+            android:name="plant"
+            app:argType="com.rahul.natureplant.model.Plant" />
     </fragment>
 
     <fragment

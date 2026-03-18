@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.ui.text)
     kapt(libs.glide.compiler)
 
     // Lifecycle
@@ -107,6 +108,19 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation ("com.google.firebase:firebase-messaging")
+
+    val cameraxVersion = "1.3.0"
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+
+    implementation("com.google.mlkit:object-detection:17.0.2")
+
+    // TFLite Task Library for Vision
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
+    // Optional: GPU acceleration for faster detection
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

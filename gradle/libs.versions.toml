@@ -26,6 +26,7 @@ androidxTestRunner = "1.6.2"
 activity = "1.12.4"
 constraintlayout = "2.2.1"
 core = "1.17.1"
+uiText = "1.10.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", versi
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 core = { group = "com.google.ar.sceneform", name = "core", version.ref = "core" }
+androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 
 
 [plugins]

@@ -10,7 +10,11 @@ import com.rahul.natureplant.R
 import com.rahul.natureplant.databinding.ItemOrderHistoryBinding
 import com.rahul.natureplant.model.Plant
 
-class OrderHistoryAdapter(private val onTrackOrderClick: (Plant) -> Unit) : ListAdapter<Plant, OrderHistoryAdapter.OrderViewHolder>(PlantDiffCallback()) {
+class OrderHistoryAdapter(
+    private val onTrackOrderClick: (Plant) -> Unit,
+    private val onLeaveReviewClick: (Plant) -> Unit,
+    private val onReorderClick: (Plant) -> Unit
+) : ListAdapter<Plant, OrderHistoryAdapter.OrderViewHolder>(PlantDiffCallback()) {
 
     var tabType: Int = 0 // 0: Active, 1: Completed, 2: Cancelled
         set(value) {
@@ -24,11 +28,17 @@ class OrderHistoryAdapter(private val onTrackOrderClick: (Plant) -> Unit) : List
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        holder.bind(getItem(position), tabType, onTrackOrderClick)
+        holder.bind(getItem(position), tabType, onTrackOrderClick, onLeaveReviewClick, onReorderClick)
     }
 
     class OrderViewHolder(private val binding: ItemOrderHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(plant: Plant, tabType: Int, onTrackOrderClick: (Plant) -> Unit) {
+        fun bind(
+            plant: Plant,
+            tabType: Int,
+            onTrackOrderClick: (Plant) -> Unit,
+            onLeaveReviewClick: (Plant) -> Unit,
+            onReorderClick: (Plant) -> Unit
+        ) {
             binding.tvPlantName.text = plant.name
             binding.tvPlantCategoryQty.text = "${plant.category} | Qty. : ${String.format("%02d", plant.quantity)} pcs"
             binding.tvPlantPrice.text = "$${String.format("%.2f", (plant.price * plant.quantity).toDouble())}"
@@ -40,8 +50,10 @@ class OrderHistoryAdapter(private val onTrackOrderClick: (Plant) -> Unit) : List
             }
 
             binding.btnTrackOrder.setOnClickListener {
-                if (tabType == 0) {
-                    onTrackOrderClick(plant)
+                when (tabType) {
+                    0 -> onTrackOrderClick(plant)
+                    1 -> onLeaveReviewClick(plant)
+                    2 -> onReorderClick(plant)
                 }
             }
 

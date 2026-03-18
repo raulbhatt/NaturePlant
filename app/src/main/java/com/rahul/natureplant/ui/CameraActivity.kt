@@ -59,6 +59,20 @@ class CameraActivity : AppCompatActivity() {
             takePhoto()
         }
 
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+
+        binding.btnGallery.setOnClickListener {
+            // TODO: Implement gallery selection
+            Toast.makeText(this, "Gallery clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnFlash.setOnClickListener {
+            // TODO: Implement flash toggle
+            Toast.makeText(this, "Flash clicked", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun startCamera() {
@@ -68,11 +82,12 @@ class CameraActivity : AppCompatActivity() {
                 val cameraProvider = cameraProviderFuture.get()
                 bindPreview(cameraProvider)
                 binding.cameraPreview.visibility = View.VISIBLE
-                binding.captureButton.visibility = View.VISIBLE
+                binding.bottomControls.visibility = View.VISIBLE
+                binding.scannerFrame.visibility = View.VISIBLE
             } catch (e: ExecutionException) {
-                Log.e("HomeFragment", "Error starting camera: ${e.message}")
+                Log.e("CameraActivity", "Error starting camera: ${e.message}")
             } catch (e: InterruptedException) {
-                Log.e("HomeFragment", "Error starting camera: ${e.message}")
+                Log.e("CameraActivity", "Error starting camera: ${e.message}")
             }
         }, ContextCompat.getMainExecutor(this))
     }
@@ -84,6 +99,7 @@ class CameraActivity : AppCompatActivity() {
             .build()
         preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
         imageCapture = ImageCapture.Builder().build()
+        cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
     }
 
@@ -103,12 +119,14 @@ class CameraActivity : AppCompatActivity() {
                             image.close()
                         }
                     }
-                    binding.cameraPreview.visibility = View.GONE
-                    binding.captureButton.visibility = View.GONE
+                    // Keep camera visible or show a loading state
+                    // binding.cameraPreview.visibility = View.GONE
+                    // binding.bottomControls.visibility = View.GONE
+                    // binding.scannerFrame.visibility = View.GONE
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    Log.e("HomeFragment", "Image capture failed: ${exception.message}", exception)
+                    Log.e("CameraActivity", "Image capture failed: ${exception.message}", exception)
                 }
             })
     }

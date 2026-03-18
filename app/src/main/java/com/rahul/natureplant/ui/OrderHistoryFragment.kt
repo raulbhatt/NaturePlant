@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -41,10 +42,19 @@ class OrderHistoryFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = OrderHistoryAdapter { plant ->
-            val action = OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(plant)
-            findNavController().navigate(action)
-        }
+        adapter = OrderHistoryAdapter(
+            onTrackOrderClick = { plant ->
+                val action = OrderHistoryFragmentDirections.actionOrderHistoryFragmentToTrackOrderFragment(plant)
+                findNavController().navigate(action)
+            },
+            onLeaveReviewClick = { plant ->
+                val action = OrderHistoryFragmentDirections.actionOrderHistoryFragmentToLeaveReviewFragment(plant)
+                findNavController().navigate(action)
+            },
+            onReorderClick = { plant ->
+                Toast.makeText(requireContext(), "Re-ordering ${plant.name}", Toast.LENGTH_SHORT).show()
+            }
+        )
         binding.rvOrders.adapter = adapter
     }
 
